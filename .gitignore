@@ -1,0 +1,15 @@
+# Editores / IDEs
+.vscode/
+.idea/
+*.swp
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Dependências (caso futuramente sejam adicionadas ferramentas de build)
+node_modules/
+
+# Variáveis de ambiente / configs locais
+.env
+.env.local
