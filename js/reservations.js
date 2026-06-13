@@ -14,9 +14,20 @@ export function getReservationsDoDiaAtivo(reservations, referenceDate = new Date
 }
 
 function isDentroDaTolerancia(reservation, now) {
+  const diaReal = now.getDay() === 0
+    ? 'domingo'
+    : now.getDay() === 6
+      ? 'sabado'
+      : null;
+
+  if (reservation.dia !== diaReal) {
+    return true;
+  }
+
   if (!reservation.horario) return true;
 
   const [horas, minutos] = reservation.horario.split(':').map(Number);
+
   const limite = new Date(now);
   limite.setHours(horas, minutos, 0, 0);
   limite.setMinutes(limite.getMinutes() + ARRIVAL_TOLERANCE_MINUTES);

@@ -18,11 +18,11 @@ export function getDiaAtivo(date = new Date()) {
   const hora = date.getHours();
 
   if (diaSemana === 0) {
-    return hora >= 18 ? 'sabado' : 'domingo';
+    return hora >= 16 ? 'sabado' : 'domingo';
   }
 
   if (diaSemana === 6) {
-    return hora >= 18 ? 'domingo' : 'sabado';
+    return hora >= 16 ? 'domingo' : 'sabado';
   }
 
   return 'sabado';
