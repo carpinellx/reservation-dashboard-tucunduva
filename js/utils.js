@@ -1,5 +1,3 @@
-// Funções utilitárias puras (sem efeitos colaterais no DOM), fáceis de testar isoladamente.
-
 const WEEKDAY_NAMES = [
   'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira',
   'Quinta-feira', 'Sexta-feira', 'Sábado',
@@ -10,24 +8,11 @@ const MONTH_NAMES = [
   'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
 ];
 
-/**
- * Formata a data atual no padrão "Sábado, 13 de junho".
- */
 export function formatDate(date = new Date()) {
   return `${WEEKDAY_NAMES[date.getDay()]}, ${date.getDate()} de ${MONTH_NAMES[date.getMonth()]}`;
 }
 
-/**
- * Define qual seção da planilha (sábado/domingo) deve ser exibida,
- * de acordo com o dia/hora atuais.
- *
- * Regras:
- * - Domingo após 18h: já mostra as reservas do próximo sábado.
- * - Domingo antes das 18h: mostra as reservas de domingo.
- * - Sábado após 18h: mostra as reservas de domingo.
- * - Sábado antes das 18h: mostra as reservas de sábado.
- * - Segunda a sexta: sempre mostra as reservas de sábado (próximo fim de semana).
- */
+// Regras de alternância entre as agendas de sábado e domingo.
 export function getDiaAtivo(date = new Date()) {
   const diaSemana = date.getDay(); // 0 = domingo, 6 = sábado
   const hora = date.getHours();
@@ -43,11 +28,6 @@ export function getDiaAtivo(date = new Date()) {
   return 'sabado';
 }
 
-/**
- * Converte uma URL "normal" do Google Sheets (a que aparece na barra de
- * endereço ao editar a planilha) para a URL de exportação em CSV.
- * Retorna `null` se a URL informada não for de uma planilha do Google Sheets.
- */
 export function buildCsvUrl(rawUrl) {
   const idMatch = rawUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if (!idMatch) return null;
@@ -58,10 +38,7 @@ export function buildCsvUrl(rawUrl) {
   return `https://docs.google.com/spreadsheets/d/${idMatch[1]}/export?format=csv&gid=${gid}`;
 }
 
-/**
- * Escapa caracteres HTML para evitar injeção (XSS) ao exibir dados
- * vindos da planilha (fonte externa e editável por terceiros).
- */
+// Evita XSS ao renderizar dados vindos da planilha.
 export function escapeHtml(value) {
   const div = document.createElement('div');
   div.textContent = String(value ?? '');

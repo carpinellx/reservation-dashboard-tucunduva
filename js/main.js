@@ -1,6 +1,3 @@
-// Ponto de entrada da aplicação: mantém o estado em memória, conecta os
-// eventos da interface e orquestra as outras camadas (dados, regras e render).
-
 import {
   DEFAULT_SHEET_CSV_URL,
   REFRESH_INTERVAL_MS,
@@ -94,8 +91,8 @@ async function loadInitialData() {
     elements.configBanner.style.display = 'none';
     updateView();
 
-    const horario = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    setStatus(true, `${state.reservations.length} reservas carregadas · ${horario}`);
+    const currentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    setStatus(true, `${state.reservations.length} reservas carregadas · ${currentTime}`);
   } catch (error) {
     showConfigError(error.message);
     elements.configBanner.style.display = 'block';
@@ -110,8 +107,8 @@ async function refreshData() {
     state.reservations = await fetchReservations(state.csvUrl, { bypassCache: true });
     updateView();
 
-    const horario = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    setStatus(true, `${state.reservations.length} reservas · atualizado às ${horario}`);
+    const currentTime = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    setStatus(true, `${state.reservations.length} reservas · atualizado às ${currentTime}`);
   } catch {
     setStatus(false, 'Erro ao atualizar');
   } finally {
@@ -119,7 +116,7 @@ async function refreshData() {
   }
 }
 
-function handleCarregarClick() {
+function handleLoadClick() {
   hideConfigError();
 
   const rawUrl = elements.sheetUrlInput.value.trim();
@@ -148,7 +145,7 @@ function registerEventListeners() {
   });
 
   elements.refreshButton.addEventListener('click', refreshData);
-  elements.btnCarregar.addEventListener('click', handleCarregarClick);
+  elements.btnCarregar.addEventListener('click', handleLoadClick);
 
   elements.filterButtons.all.addEventListener('click', () => setFilter('all'));
   elements.filterButtons.externa.addEventListener('click', () => setFilter('externa'));

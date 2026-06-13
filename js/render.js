@@ -1,6 +1,3 @@
-// Camada de apresentação: recebe dados já filtrados/ordenados e atualiza o DOM.
-// Nenhuma função aqui decide *o que* mostrar — apenas *como* mostrar.
-
 import { escapeHtml } from './utils.js';
 
 const tbody = document.getElementById('tbody');
@@ -23,10 +20,6 @@ function toNumber(value) {
   return parseInt(value, 10) || 0;
 }
 
-/**
- * Atualiza os cartões de estatísticas (reservas, adultos, crianças, total).
- * @param {Array} reservations
- */
 export function renderStats(reservations) {
   const adultos = reservations.reduce((sum, r) => sum + toNumber(r.adultos), 0);
   const criancas = reservations.reduce((sum, r) => sum + toNumber(r.criancas), 0);
@@ -78,11 +71,6 @@ function renderRow(reservation, index) {
   </tr>`;
 }
 
-/**
- * Renderiza as linhas da tabela de reservas. Mostra o estado vazio
- * quando não há nenhuma reserva para exibir.
- * @param {Array} reservations
- */
 export function renderTable(reservations) {
   if (reservations.length === 0) {
     tbody.innerHTML = '';
@@ -94,11 +82,6 @@ export function renderTable(reservations) {
   tbody.innerHTML = reservations.map(renderRow).join('');
 }
 
-/**
- * Atualiza a bolinha e o texto de status no rodapé.
- * @param {true | false | null} ok - true = sucesso, false = erro, null = neutro/carregando
- * @param {string} message
- */
 export function setStatus(ok, message) {
   statusDot.className = 'dot ' + (ok === true ? 'ok' : ok === false ? 'err' : '');
   statusText.textContent = message;

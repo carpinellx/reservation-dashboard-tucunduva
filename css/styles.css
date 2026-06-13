@@ -1,18 +1,15 @@
 :root {
-  /* Paleta principal — tons de azul (nomes corrigidos: antes chamados de "verde") */
   --azul-escuro: #36537D;
   --azul-medio: #47648F;
   --azul-claro: #6E86A9;
   --azul-suave: #DCE4EF;
   --azul-palido: #F4F7FB;
 
-  /* Paleta de destaque */
   --dourado: #C9A84C;
   --dourado-claro: #F0D98A;
 
   --branco: #FFFFFF;
 
-  /* Texto */
   --texto: #24354F;
   --texto-suave: #60728E;
 
@@ -42,7 +39,6 @@ body {
   white-space: nowrap;
 }
 
-/* ===== Header ===== */
 header {
   background: var(--azul-escuro);
   padding: 0 2rem;
@@ -102,7 +98,6 @@ header {
   border-radius: 20px;
 }
 
-/* ===== Banner de configuração da planilha ===== */
 #config-banner {
   background: linear-gradient(135deg, #1a3a1a 0%, #2d5a27 100%);
   padding: 1.25rem 2rem;
@@ -171,7 +166,6 @@ header {
   margin-top: 8px;
 }
 
-/* ===== Estatísticas ===== */
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -202,7 +196,6 @@ header {
   margin-top: 4px;
 }
 
-/* ===== Barra de ferramentas ===== */
 .toolbar {
   padding: 1rem 2rem;
   display: flex;
@@ -300,7 +293,6 @@ header {
 
 .sort-select:hover { background: var(--azul-palido); }
 
-/* ===== Tabela ===== */
 .table-container {
   padding: 1.5rem 2rem;
   overflow-x: auto;
@@ -446,7 +438,6 @@ footer {
 .dot.ok { background: #6dbf67; }
 .dot.err { background: #e06060; }
 
-/* ===== Responsivo ===== */
 @media (max-width: 600px) {
   header { padding: 0 0.75rem; }
   .header-date { display: none; }
