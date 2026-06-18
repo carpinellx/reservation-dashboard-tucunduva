@@ -1,15 +1,18 @@
 :root {
+  /* Paleta principal — tons de azul (nomes corrigidos: antes chamados de "verde") */
   --azul-escuro: #36537D;
   --azul-medio: #47648F;
   --azul-claro: #6E86A9;
   --azul-suave: #DCE4EF;
   --azul-palido: #F4F7FB;
 
+  /* Paleta de destaque */
   --dourado: #C9A84C;
   --dourado-claro: #F0D98A;
 
   --branco: #FFFFFF;
 
+  /* Texto */
   --texto: #24354F;
   --texto-suave: #60728E;
 
@@ -39,6 +42,7 @@ body {
   white-space: nowrap;
 }
 
+/* ===== Header ===== */
 header {
   background: var(--azul-escuro);
   padding: 0 2rem;
@@ -98,6 +102,7 @@ header {
   border-radius: 20px;
 }
 
+/* ===== Banner de configuração da planilha ===== */
 #config-banner {
   background: linear-gradient(135deg, #1a3a1a 0%, #2d5a27 100%);
   padding: 1.25rem 2rem;
@@ -166,6 +171,7 @@ header {
   margin-top: 8px;
 }
 
+/* ===== Estatísticas ===== */
 .stats-bar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -196,6 +202,7 @@ header {
   margin-top: 4px;
 }
 
+/* ===== Barra de ferramentas ===== */
 .toolbar {
   padding: 1rem 2rem;
   display: flex;
@@ -293,6 +300,7 @@ header {
 
 .sort-select:hover { background: var(--azul-palido); }
 
+/* ===== Tabela ===== */
 .table-container {
   padding: 1.5rem 2rem;
   overflow-x: auto;
@@ -438,6 +446,7 @@ footer {
 .dot.ok { background: #6dbf67; }
 .dot.err { background: #e06060; }
 
+/* ===== Responsivo ===== */
 @media (max-width: 600px) {
   header { padding: 0 0.75rem; }
   .header-date { display: none; }
@@ -464,4 +473,134 @@ footer {
 
   th:nth-child(6),
   td:nth-child(6) { display: none; }
+}
+
+/* ===== Seletor de eventos ===== */
+#event-selector {
+  background: var(--azul-palido);
+  border-bottom: 1px solid var(--borda);
+  padding: 0.75rem 2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.event-list-empty {
+  font-size: 13px;
+  color: var(--texto-suave);
+}
+
+#event-list {
+  display: flex;
+  gap: 8px;
+  min-width: max-content;
+}
+
+.event-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1.5px solid var(--borda);
+  background: var(--branco);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.event-card:hover { border-color: var(--azul-claro); background: var(--azul-palido); }
+
+.event-card.today  { border-color: var(--dourado); }
+.event-card.past   { opacity: 0.5; }
+
+.event-card.selected {
+  background: var(--azul-medio);
+  border-color: var(--azul-medio);
+  color: var(--branco);
+}
+
+.event-card .event-service {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.event-card .event-date {
+  font-size: 11px;
+  color: var(--texto-suave);
+}
+
+.event-card.selected .event-date { color: rgba(255, 255, 255, 0.75); }
+
+.event-badge {
+  font-size: 10px;
+  background: var(--dourado);
+  color: #5a3e00;
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-weight: 600;
+  width: fit-content;
+  letter-spacing: 0.03em;
+}
+
+.event-card.selected .event-badge {
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--branco);
+}
+
+/* ===== Faixa do evento ativo ===== */
+.active-event-header {
+  background: var(--azul-medio);
+  color: var(--branco);
+  padding: 8px 2rem;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 600px) {
+  #event-selector { padding: 0.75rem 1rem; }
+  .active-event-header { padding: 8px 1rem; font-size: 13px; }
+}
+
+/* ===== Contador de visíveis ===== */
+.visible-counter {
+  font-size: 12px;
+  color: var(--texto-suave);
+  background: var(--azul-palido);
+  border: 1px solid var(--borda);
+  border-radius: 20px;
+  padding: 5px 12px;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+/* ===== Destaque de reservas novas ===== */
+@keyframes highlightNew {
+  0%   { background-color: rgba(201, 168, 76, 0.30); }
+  60%  { background-color: rgba(201, 168, 76, 0.12); }
+  100% { background-color: transparent; }
+}
+
+tbody tr.is-new {
+  opacity: 1;
+  animation: highlightNew 3.5s ease forwards;
+}
+
+tbody tr.is-new .mesa-num {
+  border-color: var(--dourado);
+  color: var(--dourado);
+}
+
+/* ===== Valor total (café) ===== */
+.valor-total {
+  font-weight: 500;
+  color: var(--azul-escuro);
+  font-size: 13px;
+  white-space: nowrap;
 }

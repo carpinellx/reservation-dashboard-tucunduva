@@ -3,8 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/png" href="./assets/logo.png">
   <title>Fazenda Tucunduva — Painel de Reservas</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#36537D">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <!-- iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Reservas">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-apple.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,28 +37,25 @@
     <div class="header-date" id="header-date">—</div>
   </header>
 
-  <section id="config-banner" aria-label="Configuração da planilha" style="display:none">
-    <p>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Cole o link CSV do Google Sheets para conectar as reservas em tempo real
-    </p>
-    <div class="config-row">
-      <label class="sr-only" for="sheet-url">Link da planilha do Google Sheets</label>
-      <input id="sheet-url" type="text" placeholder="https://docs.google.com/spreadsheets/d/...">
-      <button id="btn-carregar" class="btn-carregar" type="button">Carregar</button>
-    </div>
-    <p id="config-error" role="alert"></p>
-    <p id="config-hint">No Google Sheets: Arquivo → Compartilhar → Publicar na web → selecionar aba → CSV → Publicar → copiar link</p>
-  </section>
-
   <main>
-    <section class="stats-bar" id="stats-bar" aria-label="Resumo das reservas do dia">
+
+    <!-- Seletor de evento -------------------------------------------------- -->
+    <section id="event-selector" aria-label="Selecionar evento">
+      <div id="event-list" role="list" aria-label="Eventos disponíveis"></div>
+    </section>
+
+    <!-- Faixa do evento selecionado ---------------------------------------- -->
+    <div id="active-event-header" class="active-event-header" style="display:none"></div>
+
+    <!-- Estatísticas -------------------------------------------------------- -->
+    <section class="stats-bar" id="stats-bar" aria-label="Resumo das reservas">
       <div class="stat-item"><div class="val" id="s-reservas">—</div><div class="lbl">Reservas</div></div>
       <div class="stat-item"><div class="val" id="s-adultos">—</div><div class="lbl">Adultos</div></div>
       <div class="stat-item"><div class="val" id="s-criancas">—</div><div class="lbl">Crianças</div></div>
       <div class="stat-item"><div class="val" id="s-total">—</div><div class="lbl">Total de pessoas</div></div>
     </section>
 
+    <!-- Barra de ferramentas ------------------------------------------------ -->
     <div class="toolbar">
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -56,17 +63,17 @@
         <input type="text" id="search" placeholder="Buscar por nome ou mesa...">
       </div>
 
-      <div class="filter-group" role="group" aria-label="Filtrar por área">
-        <button class="fbtn active" id="btn-all" type="button" aria-pressed="true">Todas</button>
-        <button class="fbtn" id="btn-externa" type="button" aria-pressed="false">☀️ Externa</button>
-        <button class="fbtn" id="btn-interna" type="button" aria-pressed="false">🏠 Interna</button>
+      <div class="filter-group" id="filter-group-area" role="group" aria-label="Filtrar por área">
+        <button class="fbtn active" id="btn-all"      type="button" aria-pressed="true">Todas</button>
+        <button class="fbtn"        id="btn-externa"  type="button" aria-pressed="false">☀️ Externa</button>
+        <button class="fbtn"        id="btn-interna"  type="button" aria-pressed="false">🏠 Interna</button>
       </div>
 
       <label class="sr-only" for="sort-select">Ordenar reservas por</label>
       <select id="sort-select" class="sort-select">
+        <option value="nome">👤 Nome</option>
         <option value="horario">⏰ Horário</option>
         <option value="mesa">🍽️ Mesa</option>
-        <option value="nome">👤 Nome</option>
         <option value="area">📍 Área</option>
       </select>
 
@@ -74,8 +81,11 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
         Atualizar
       </button>
+
+      <span id="visible-counter" class="visible-counter" hidden aria-live="polite"></span>
     </div>
 
+    <!-- Tabela ------------------------------------------------------------- -->
     <div class="table-container">
       <table id="reservas-table">
         <thead>
@@ -84,7 +94,7 @@
             <th scope="col">Nome</th>
             <th scope="col">Horário</th>
             <th scope="col">Pessoas</th>
-            <th scope="col">Área</th>
+            <th scope="col" id="th-area-ou-valor">Área</th>
             <th scope="col">Observação</th>
           </tr>
         </thead>
@@ -96,13 +106,23 @@
         <p>Nenhuma reserva encontrada</p>
       </div>
     </div>
+
   </main>
 
   <footer>
     <div class="dot" id="status-dot" aria-hidden="true"></div>
-    <span id="status-text" role="status" aria-live="polite">Aguardando planilha</span>
+    <span id="status-text" role="status" aria-live="polite">Aguardando dados</span>
   </footer>
 
   <script type="module" src="js/main.js"></script>
+
+  <!-- Registro do Service Worker (PWA) -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js');
+      });
+    }
+  </script>
 </body>
 </html>

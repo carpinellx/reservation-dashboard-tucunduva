@@ -1,8 +1,7 @@
 # Reservation Dashboard
 
-🔗 **[Demo ao vivo](https://carpinellx.github.io/reservation-dashboard-tucunduva/)**
-
-Dashboard web para acompanhamento de reservas de restaurante em tempo real, integrado ao Google Sheets.
+Painel de reservas em tempo real para restaurantes, que consome dados
+diretamente de uma planilha do Google Sheets publicada como CSV.
 
 Construído em **Vanilla JavaScript (ES Modules)**, sem frameworks e sem etapa
 de build — basta abrir em um servidor estático.
@@ -19,14 +18,59 @@ de build — basta abrir em um servidor estático.
 
 ## Stack
 
-- HTML5
-- CSS3
-- JavaScript (ES Modules)
-- Google Sheets (CSV)
+- HTML5 semântico
+- CSS3 (variáveis, grid, flexbox, media queries)
+- JavaScript (ES Modules) — sem dependências externas
+- Google Sheets como fonte de dados (exportado em CSV)
+
+## Estrutura do projeto
+
+```
+├── index.html
+├── assets/
+│   └── logo.png
+├── css/
+│   └── styles.css
+└── js/
+    ├── config.js        # constantes da aplicação
+    ├── utils.js          # funções utilitárias (data, escape HTML, URL do sheet)
+    ├── csvParser.js       # parsing do CSV em objetos de reserva
+    ├── dataService.js      # busca e atualização dos dados
+    ├── reservations.js     # regras de filtro, ordenação e dia ativo
+    ├── render.js            # atualização do DOM
+    └── main.js               # estado da aplicação e eventos
+```
+
+## Como executar
+
+Como o projeto usa ES Modules, é necessário servir os arquivos via HTTP (não
+funciona abrindo o `index.html` direto pelo `file://`).
+
+```bash
+# Python
+python3 -m http.server 8080
+
+# ou Node
+npx serve .
+```
+
+Depois acesse `http://localhost:8080`.
+
+## Conectando sua própria planilha
+
+1. No Google Sheets, vá em **Arquivo → Compartilhar → Publicar na web**.
+2. Selecione a aba desejada e o formato **CSV**.
+3. Clique em **Publicar** e copie o link gerado.
+4. Cole o link no campo exibido no topo do painel e clique em **Carregar**.
+
+A planilha deve seguir o formato esperado pelas colunas:
+`Mesa | Nome | Adultos | Crianças | Horário | Área | Observação`, organizadas
+em blocos com um título de seção (`Sábado` / `Domingo`).
 
 ## Sobre o projeto
 
-Desenvolvido para gerenciamento de reservas da Fazenda Tucunduva. Com foco em organização de
+Este projeto foi originalmente desenvolvido para a Fazenda Tucunduva e
+posteriormente refatorado como peça de portfólio, com foco em organização de
 código, separação de responsabilidades, acessibilidade e boas práticas de
 front-end sem frameworks.
 
