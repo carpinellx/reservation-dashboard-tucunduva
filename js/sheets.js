@@ -57,6 +57,15 @@ export async function fetchEventNames() {
  */
 export async function fetchEventReservations(tabName, { bypassCache = false } = {}) {
   const csvText = await fetchSheet(tabName, bypassCache);
-  const isCafe  = tabName.toLowerCase().includes('caf');
-  return parseReservationsCsv(csvText, { isCafe });
+
+  const isCafe = tabName.toLowerCase().includes('caf');
+
+  const reservations = parseReservationsCsv(csvText, { isCafe });
+
+  const datePart = tabName.split(' ')[0]; // 20/06/2026
+
+  return reservations.map((reservation) => ({
+    ...reservation,
+    eventDate: datePart,
+  }));
 }

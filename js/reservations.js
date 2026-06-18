@@ -18,23 +18,28 @@ const SORT_COMPARATORS = {
   horario: (a, b) => (a.horario || '').localeCompare(b.horario || ''),
 };
 
-function isDentroDaTolerancia(reservation, now) {
-  // Garantimos que a reserva tenha horário E a data para calcularmos corretamente
-  if (!reservation.horario || !reservation.data) return true;
+function isWithinTolerance(reservation, now) {
+  if (!reservation.horario || !reservation.eventDate) {
+    return true;
+  }
 
-  const [horas, minutos] = reservation.horario.split(':').map(Number);
-  
-  // CORREÇÃO: Usamos reservation.data como ponto de partida
-  const limite = new Date(reservation.data);
-  
-  // Ajustamos para o horário da reserva
-  limite.setHours(horas, minutos, 0, 0);
-  
-  // Somamos os minutos de tolerância permitidos
-  limite.setMinutes(limite.getMinutes() + ARRIVAL_TOLERANCE_MINUTES);
+  const [day, month, year] = reservation.eventDate
+    .split('/')
+    .map(Number);
 
-  // Verificamos se o momento atual ainda está dentro do limite
-  return now <= limite;
+  const [hours, minutes] = reservation.horario
+    .split(':')
+    .map(Number);
+
+  const limit = new Date(
+    year,
+    month - 1,
+    day,
+    hours,
+    minutes + ARRIVAL_TOLERANCE_MINUTES
+  );
+
+  return now <= limit;
 }
 
 /**
@@ -56,7 +61,7 @@ export function selectVisibleReservations(reservations, { area, search, sort }, 
       r.mesa.toString().includes(query);
 
     // CORREÇÃO: Descomentado para o filtro de horário voltar a funcionar
-    return areaOk && searchOk && isDentroDaTolerancia(r, now);
+    return areaOk && searchOk && isWithinTolerance(r, now);
   });
 
   const comparator = SORT_COMPARATORS[sort] || SORT_COMPARATORS.horario;
