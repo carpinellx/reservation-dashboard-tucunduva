@@ -1,14 +1,10 @@
 // Service Worker — Fazenda Tucunduva
 //
-// Estratégias de cache:
-//   - Arquivos estáticos (HTML, CSS, JS, imagens): cache-first
-//     → carrega instantaneamente; atualiza cache em background.
-//   - Dados do Google Sheets: network-first com fallback para cache
-//     → sempre tenta buscar dados frescos; se offline, serve o último
-//     conjunto de dados que foi buscado com sucesso.
+// Estratégia: network-first para tudo.
+// Sempre busca do servidor quando há conexão — garante arquivos frescos.
+// Cai para cache apenas se estiver offline.
 
-const STATIC_CACHE  = 'garcom-static-v2';
-const DATA_CACHE    = 'garcom-data-v2';
+const CACHE_NAME = 'garcom-v3';
 
 const STATIC_ASSETS = [
   './',
@@ -29,27 +25,21 @@ const STATIC_ASSETS = [
   './assets/icons/icon-apple.png',
 ];
 
-// ─── Instalação ───────────────────────────────────────────────────────────
-// Pré-carrega todos os arquivos estáticos no cache.
-// skipWaiting() faz o SW ativar imediatamente, sem esperar as abas fecharem.
-
+// Instalação: pré-carrega os arquivos no cache para uso offline.
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(STATIC_ASSETS)),
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)),
   );
   self.skipWaiting();
 });
 
-// ─── Ativação ─────────────────────────────────────────────────────────────
-// Remove versões antigas do cache para liberar espaço.
-// clients.claim() faz o SW assumir o controle das abas abertas imediatamente.
-
+// Ativação: remove caches de versões anteriores.
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== STATIC_CACHE && key !== DATA_CACHE)
+          .filter((key) => key !== CACHE_NAME)
           .map((key) => caches.delete(key)),
       ),
     ),
@@ -57,53 +47,24 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// ─── Interceptação de requests ────────────────────────────────────────────
-
+// Fetch: network-first para tudo.
+// Online  → servidor (sempre atualizado) + atualiza cache em background.
+// Offline → cache (última versão conhecida).
 self.addEventListener('fetch', (event) => {
-  const { request } = event;
-  const url = new URL(request.url);
-
-  // Dados da planilha → network-first (dados frescos sempre que possível)
-  if (url.hostname.includes('google') || url.hostname.includes('googleapis')) {
-    event.respondWith(networkFirst(request));
-    return;
-  }
-
-  // Arquivos estáticos → cache-first (resposta instantânea)
-  event.respondWith(cacheFirst(request));
+  event.respondWith(networkFirst(event.request));
 });
-
-// ─── Estratégias de cache ─────────────────────────────────────────────────
-
-async function cacheFirst(request) {
-  const cached = await caches.match(request);
-  if (cached) return cached;
-
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(STATIC_CACHE);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch {
-    // Recurso não está em cache e não há conexão — nada a fazer.
-    return new Response('Recurso indisponível offline.', { status: 503 });
-  }
-}
 
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
     if (response.ok) {
-      const cache = await caches.open(DATA_CACHE);
+      const cache = await caches.open(CACHE_NAME);
       cache.put(request, response.clone());
     }
     return response;
   } catch {
-    // Sem conexão → devolve o último dado em cache, se existir.
     const cached = await caches.match(request);
     if (cached) return cached;
-    return new Response('Sem conexão e sem dados em cache.', { status: 503 });
+    return new Response('Sem conexão.', { status: 503 });
   }
 }
