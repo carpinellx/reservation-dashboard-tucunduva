@@ -12,6 +12,7 @@ import {
   setStatus,
 } from './render.js';
 import { formatDate } from './utils.js';
+import { initThemeToggle } from './theme.js';
 
 // ─── Estado ───────────────────────────────────────────────────────────────
 
@@ -175,6 +176,7 @@ function registerEventListeners() {
 function init() {
   elements.headerDate.textContent = formatDate();
   elements.sortSelect.value       = state.sort;
+  initThemeToggle();
   registerEventListeners();
   loadEvents();
   setInterval(refreshCurrentEvent, REFRESH_INTERVAL_MS);

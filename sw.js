@@ -4,7 +4,7 @@
 // Sempre busca do servidor quando há conexão — garante arquivos frescos.
 // Cai para cache apenas se estiver offline.
 
-const CACHE_NAME = 'garcom-v3';
+const CACHE_NAME = 'garcom-v9';
 
 const STATIC_ASSETS = [
   './',
@@ -18,6 +18,7 @@ const STATIC_ASSETS = [
   './js/reservations.js',
   './js/render.js',
   './js/main.js',
+  './js/theme.js',
   './js/utils.js',
   './assets/logo.png',
   './assets/icons/icon-192.png',

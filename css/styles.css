@@ -12,6 +12,16 @@
 
   --branco: #FFFFFF;
 
+  /* Cor de "superfície" — fundo de cards/toolbar/inputs.
+     Igual a --branco no modo claro; some para escuro no modo dark. */
+  --superficie: var(--branco);
+
+  /* Cor de texto em destaque (números, horário, valor) — diferente de
+     --azul-medio/--azul-escuro porque esses dois também são usados como
+     FUNDO em outros lugares (header, botões ativos), que não podem mudar
+     no modo escuro. Esta variável é só para texto. */
+  --acento-texto: var(--azul-medio);
+
   /* Texto */
   --texto: #24354F;
   --texto-suave: #60728E;
@@ -27,10 +37,11 @@
 
 body {
   font-family: 'DM Sans', sans-serif;
-  background: var(--branco);
+  background: var(--superficie);
   color: var(--texto);
   min-height: 100vh;
   padding-bottom: 40px; /* espaço para o footer fixo */
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .sr-only {
@@ -100,6 +111,12 @@ header {
   padding: 6px 14px;
   border: 0.5px solid rgba(200, 223, 197, 0.3);
   border-radius: 20px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 /* ===== Banner de configuração da planilha ===== */
@@ -181,7 +198,7 @@ header {
 }
 
 .stat-item {
-  background: var(--branco);
+  background: var(--superficie);
   padding: 1rem 1.5rem;
   text-align: center;
 }
@@ -190,7 +207,7 @@ header {
   font-family: 'Playfair Display', serif;
   font-size: 28px;
   font-weight: 500;
-  color: var(--azul-medio);
+  color: var(--acento-texto);
   line-height: 1;
 }
 
@@ -210,7 +227,7 @@ header {
   gap: 10px;
   flex-wrap: wrap;
   border-bottom: 1px solid var(--borda);
-  background: var(--branco);
+  background: var(--superficie);
 }
 
 .search-wrap {
@@ -290,7 +307,7 @@ header {
   padding: 8px 12px;
   border-radius: 20px;
   border: 1px solid var(--borda);
-  background: var(--branco);
+  background: var(--superficie);
   color: var(--texto-suave);
   font-size: 13px;
   font-family: 'DM Sans', sans-serif;
@@ -353,7 +370,7 @@ td { padding: 13px 14px; vertical-align: middle; }
   justify-content: center;
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
-  color: var(--azul-medio);
+  color: var(--acento-texto);
   font-weight: 500;
 }
 
@@ -364,7 +381,7 @@ td { padding: 13px 14px; vertical-align: middle; }
   align-items: center;
   gap: 5px;
   font-weight: 500;
-  color: var(--azul-escuro);
+  color: var(--acento-texto);
 }
 
 .horario svg { color: var(--texto-suave); }
@@ -503,7 +520,7 @@ footer {
   padding: 8px 14px;
   border-radius: 10px;
   border: 1.5px solid var(--borda);
-  background: var(--branco);
+  background: var(--superficie);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -525,6 +542,7 @@ footer {
 .event-card .event-service {
   font-size: 13px;
   font-weight: 500;
+  color: var(--texto);
 }
 
 .event-card .event-date {
@@ -600,7 +618,71 @@ tbody tr.is-new .mesa-num {
 /* ===== Valor total (café) ===== */
 .valor-total {
   font-weight: 500;
-  color: var(--azul-escuro);
+  color: var(--acento-texto);
   font-size: 13px;
   white-space: nowrap;
 }
+
+/* ===== Modo escuro =====
+   Header, footer, banner e botões "ativos" continuam com as mesmas cores
+   azuis — só o que era fundo claro (página, cards, inputs) e texto escuro
+   é invertido. */
+[data-theme="dark"] {
+  --azul-palido: #1C2536;
+  --superficie:  #131A28;
+  --texto:       #E7ECF5;
+  --texto-suave: #8C9BB5;
+  --borda:       rgba(255, 255, 255, 0.08);
+  --acento-texto: #8FB0DE;
+}
+
+/* Texto dos cards de evento não selecionados — um pouco mais claro que o
+   --texto padrão, pra ficar bem legível contra o fundo escuro do card. */
+[data-theme="dark"] .event-card:not(.selected) .event-service {
+  color: #F5F8FC;
+}
+
+/* Horário, mesa, pessoas e observação seguem a mesma cor do nome
+   no modo escuro, em vez das cores de destaque usadas no modo claro. */
+[data-theme="dark"] .horario,
+[data-theme="dark"] .mesa-num,
+[data-theme="dark"] .pessoas,
+[data-theme="dark"] .obs,
+[data-theme="dark"] .obs-mobile,
+[data-theme="dark"] .stat-item .val,
+[data-theme="dark"] .stat-item .lbl,
+[data-theme="dark"] .btn-refresh,
+[data-theme="dark"] .sort-select {
+  color: var(--texto);
+}
+
+/* Filtros e datas dos cards de evento têm estado "ativo/selecionado"
+   próprio (texto branco sobre fundo azul) — excluídos pra não competir
+   com essa regra. */
+[data-theme="dark"] .fbtn:not(.active):not([aria-pressed="true"]) {
+  color: var(--texto);
+}
+
+[data-theme="dark"] .event-card:not(.selected) .event-date {
+  color: var(--texto);
+}
+
+/* ===== Botão de modo escuro ===== */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--branco);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.theme-toggle:hover  { background: rgba(255, 255, 255, 0.18); }
+.theme-toggle:active { transform: scale(0.92); }

@@ -3,6 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Aplica o tema salvo ANTES do CSS pintar a tela — evita o "flash"
+       de tela clara por uma fração de segundo ao abrir o app no escuro. -->
+  <script>
+    (function () {
+      try {
+        if (localStorage.getItem('garcom:theme') === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        }
+      } catch (e) { /* localStorage indisponível — segue no modo claro */ }
+    })();
+  </script>
+
   <title>Fazenda Tucunduva — Painel de Reservas</title>
 
   <!-- PWA -->
@@ -38,7 +51,16 @@
         <span>Painel de Reservas</span>
       </div>
     </div>
-    <div class="header-date" id="header-date">—</div>
+    <div class="header-actions">
+      <div class="header-date" id="header-date">—</div>
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-pressed="false"
+        aria-label="Ativar modo escuro"
+      >🌙</button>
+    </div>
   </header>
 
   <main>
