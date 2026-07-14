@@ -1,0 +1,8 @@
+# Força LF em todo o repositório, independente do SO/editor de quem commita.
+# Sem isso, arquivos editados no Windows (CRLF) e no Mac/Linux (LF) ficam
+# misturados, gerando diffs de "linha inteira alterada" sem nenhuma mudança real.
+* text=auto eol=lf
+
+# Binários: nunca normalizar.
+*.png binary
+*.ico binary

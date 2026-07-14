@@ -1,0 +1,25 @@
+{
+  "name": "Fazenda Tucunduva — Reservas",
+  "short_name": "Reservas",
+  "description": "Painel de reservas em tempo real da Fazenda Tucunduva",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#36537D",
+  "background_color": "#36537D",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

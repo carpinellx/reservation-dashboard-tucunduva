@@ -1,0 +1,20 @@
+{
+  "name": "reservation-dashboard-tucunduva",
+  "version": "1.0.0",
+  "description": "Painel de reservas em tempo real para restaurantes, consumindo dados do Google Sheets via proxy seguro.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev":   "vite",
+    "build": "vite build",
+    "test":  "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/carpinellx/reservation-dashboard-tucunduva.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "vite": "^8.1.4"
+  }
+}

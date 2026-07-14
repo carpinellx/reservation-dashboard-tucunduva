@@ -1,0 +1,23 @@
+# Editores / IDEs
+.vscode/
+.idea/
+*.swp
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Dependências
+node_modules/
+
+# Variáveis de ambiente — NUNCA commitar, contém o token do proxy
+.env
+.env.local
+.env.*.local
+
+# Pasta gerada pelo Vite no build — não precisa versionar
+dist/
+
+# Script do proxy — roda dentro da conta Google (script.google.com),
+# não pertence ao repositório. Mantido localmente só como referência.
+proxy/
