@@ -151,6 +151,12 @@ async function selectEvent(event) {
     state.mesasOcupadas = mesasOcupadas;
     state.reservations  = reservations;
     state.previousKeys  = new Set(reservations.map(reservationKey));
+
+    // Revela o conteúdo principal (estava oculto até o primeiro carregamento)
+    document.getElementById('stats-bar').style.display       = '';
+    document.querySelector('.toolbar').style.display         = '';
+    document.querySelector('.table-container').style.display = '';
+
     updateView();
 
     const horario     = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -233,6 +239,12 @@ function registerEventListeners() {
 function init() {
   elements.headerDate.textContent = formatDate();
   elements.sortSelect.value       = state.sort;
+
+  // Esconde o conteúdo principal até um evento ser carregado
+  document.getElementById('stats-bar').style.display       = 'none';
+  document.querySelector('.toolbar').style.display         = 'none';
+  document.querySelector('.table-container').style.display = 'none';
+
   initThemeToggle();
   registerEventListeners();
   loadEvents();
