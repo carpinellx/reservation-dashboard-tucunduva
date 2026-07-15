@@ -2,7 +2,7 @@
 
 import { escapeHtml } from './utils.js';
 import { getAreaByMesa } from './utils.js';
-import { reservationKey, calculateReservationTotal } from './reservations.js';
+import { reservationKey } from './reservations.js';
 import { calcularStatusMesa } from './powerchef.js';
 
 const tbody       = document.getElementById('tbody');
@@ -13,7 +13,6 @@ const statusText  = document.getElementById('status-text');
 const eventList   = document.getElementById('event-list');
 const eventHeader = document.getElementById('active-event-header');
 const counterEl   = document.getElementById('visible-counter');
-const thAreaValor    = document.getElementById('th-area-ou-valor');
 const filterGroup    = document.getElementById('filter-group-area');
 const sortOptionArea = document.getElementById('sort-option-area');
 const btnTodasMesas  = document.getElementById('btn-todas-mesas');
@@ -29,10 +28,6 @@ const CLOCK_ICON  = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
 const PEOPLE_ICON = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
 
 function toNumber(v) { return parseInt(v, 10) || 0; }
-
-function formatCurrency(value) {
-  return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
 
 // ─── Seletor de eventos ────────────────────────────────────────────────────
 
@@ -103,10 +98,10 @@ const THEAD_ALMOCO = `<tr>
 </tr>`;
 
 export function adaptTableToEvent(isCafe) {
-  thead.innerHTML                = isCafe ? THEAD_CAFE : THEAD_ALMOCO;
-  filterGroup.style.display      = isCafe ? 'none'     : 'flex';
-  sortOptionArea.hidden          = isCafe;
-  btnTodasMesas.style.display    = isCafe ? 'none'     : 'inline-flex';
+  thead.innerHTML             = isCafe ? THEAD_CAFE : THEAD_ALMOCO;
+  filterGroup.style.display   = isCafe ? 'none'     : 'flex';
+  sortOptionArea.hidden       = isCafe;
+  btnTodasMesas.style.display = isCafe ? 'none'     : 'inline-flex';
 }
 
 // ─── Contador de visíveis ──────────────────────────────────────────────────
@@ -134,20 +129,6 @@ export function renderStats(reservations) {
 }
 
 // ─── Tabela ────────────────────────────────────────────────────────────────
-
-function renderAreaOuValor(reservation, isCafe) {
-  if (!isCafe) {
-    const isInterna = getAreaByMesa(reservation.mesa) === 'interna';
-    const cls = isInterna ? 'area-interna' : 'area-externa';
-    const label = isInterna ? 'INTERNA' : 'EXTERNA';
-    return `<span class="area-tag ${cls}">
-      <span class="desktop-area">${label}</span>
-      <span class="mobile-area">${isInterna ? 'INT' : 'EXT'}</span>
-    </span>`;
-  }
-
-  return `<span class="valor-total">${formatCurrency(calculateReservationTotal(reservation))}</span>`;
-}
 
 function renderRow(reservation, index, isNew, isCafe, mesasOcupadas) {
   const adultos  = toNumber(reservation.adultos);
