@@ -65,15 +65,12 @@
 
   <main>
 
-    <!-- Seletor de evento -------------------------------------------------- -->
     <section id="event-selector" aria-label="Selecionar evento">
       <div id="event-list" role="list" aria-label="Eventos disponíveis"></div>
     </section>
 
-    <!-- Faixa do evento selecionado ---------------------------------------- -->
     <div id="active-event-header" class="active-event-header" style="display:none"></div>
 
-    <!-- Estatísticas -------------------------------------------------------- -->
     <section class="stats-bar" id="stats-bar" aria-label="Resumo das reservas">
       <div class="stat-item"><div class="val" id="s-reservas">—</div><div class="lbl">Reservas</div></div>
       <div class="stat-item"><div class="val" id="s-adultos">—</div><div class="lbl">Adultos</div></div>
@@ -81,7 +78,6 @@
       <div class="stat-item"><div class="val" id="s-total">—</div><div class="lbl">Total de pessoas</div></div>
     </section>
 
-    <!-- Barra de ferramentas ------------------------------------------------ -->
     <div class="toolbar">
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -111,20 +107,9 @@
       <span id="visible-counter" class="visible-counter" hidden aria-live="polite"></span>
     </div>
 
-    <!-- Tabela ------------------------------------------------------------- -->
     <div class="table-container">
       <table id="reservas-table">
-        <thead>
-          <tr>
-            <th scope="col">Mesa</th>
-            <th scope="col">Nome</th>
-            <th scope="col">Horário</th>
-            <th scope="col">Pessoas</th>
-            <th scope="col" id="th-area-ou-valor">Área</th>
-            <th scope="col">Status</th>
-            <th scope="col">Observação</th>
-          </tr>
-        </thead>
+        <thead id="table-head"></thead>
         <tbody id="tbody"></tbody>
       </table>
 

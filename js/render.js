@@ -1,7 +1,4 @@
-// Camada de apresentação: recebe dados prontos e atualiza o DOM.
-
-import { escapeHtml } from './utils.js';
-import { getAreaByMesa } from './utils.js';
+import { escapeHtml, getAreaByMesa } from './utils.js';
 import { reservationKey } from './reservations.js';
 import { calcularStatusMesa } from './powerchef.js';
 
@@ -28,8 +25,6 @@ const CLOCK_ICON  = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"
 const PEOPLE_ICON = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;
 
 function toNumber(v) { return parseInt(v, 10) || 0; }
-
-// ─── Seletor de eventos ────────────────────────────────────────────────────
 
 export function renderEventSelector(events, selectedTabName) {
   if (events.length === 0) {
@@ -72,16 +67,6 @@ export function renderActiveEventHeader(event) {
     `${event.serviceIcon}  ${event.serviceLabel} · ${event.weekdayLabel}, ${event.dateLabel} · ${event.serviceHours}`;
 }
 
-// ─── Adaptações por tipo de evento ────────────────────────────────────────
-
-/**
- * Ajusta a tabela e os filtros de acordo com o tipo de evento.
- * Para café: esconde filtros de área, troca o cabeçalho da coluna e
- * remove a opção "Área" do seletor de ordenação (reservation.area é
- * sempre vazio em eventos de café — ordenar por ela não teria efeito).
- *
- * @param {boolean} isCafe
- */
 const THEAD_CAFE = `<tr>
   <th scope="col">Mesa</th>
   <th scope="col">Nome</th>
@@ -104,8 +89,6 @@ export function adaptTableToEvent(isCafe) {
   btnTodasMesas.style.display = isCafe ? 'none'     : 'inline-flex';
 }
 
-// ─── Contador de visíveis ──────────────────────────────────────────────────
-
 export function renderCounter(visibleCount, totalCount) {
   if (visibleCount === totalCount || totalCount === 0 || visibleCount === 0) {
     counterEl.hidden = true;
@@ -114,8 +97,6 @@ export function renderCounter(visibleCount, totalCount) {
   counterEl.textContent = `Mostrando ${visibleCount} de ${totalCount}`;
   counterEl.hidden = false;
 }
-
-// ─── Estatísticas ──────────────────────────────────────────────────────────
 
 export function renderStats(reservations) {
   const adultos  = reservations.reduce((sum, r) => sum + toNumber(r.adultos), 0);
@@ -127,8 +108,6 @@ export function renderStats(reservations) {
   statElements.criancas.textContent = criancas;
   statElements.total.textContent    = adultos + criancas;
 }
-
-// ─── Tabela ────────────────────────────────────────────────────────────────
 
 function renderRow(reservation, index, isNew, isCafe, mesasOcupadas) {
   const adultos  = toNumber(reservation.adultos);
@@ -158,7 +137,7 @@ function renderRow(reservation, index, isNew, isCafe, mesasOcupadas) {
     return `<tr ${rowAttrs}>${mesaCell}${nomeCell}${horarioCell}${pessoasCell}</tr>`;
   }
 
-  // Almoço: Mesa | Nome (+obs) | Horário | Pessoas | Status (desktop)
+  // Almoço: Mesa | Nome (+obs) | Horário | Pessoas | Status
   const status     = calcularStatusMesa(reservation.mesa, mesasOcupadas);
   const statusCell = status
     ? `<td class="col-status"><span class="mesa-status ${status.classe}" title="${status.extra}">${status.label}</span></td>`
@@ -222,8 +201,6 @@ export function renderTabelaSalao(visaoSalao) {
     .map((mesaInfo, i) => renderRowSalao(mesaInfo, i))
     .join('');
 }
-
-// ─── Status ────────────────────────────────────────────────────────────────
 
 export function setStatus(ok, message) {
   statusDot.className    = 'dot ' + (ok === true ? 'ok' : ok === false ? 'err' : '');

@@ -1,10 +1,3 @@
-// Controla o modo escuro. O botão fica visível em todas as resoluções de tela.
-//
-// O estado inicial já é aplicado por um script inline no <head> do
-// index.html, antes do CSS ser pintado — isso evita o "flash" de tela
-// clara antes deste módulo carregar. Aqui só sincronizamos o ícone do
-// botão e cuidamos do clique.
-
 const STORAGE_KEY = 'garcom:theme';
 
 const root = document.documentElement;
@@ -25,6 +18,8 @@ function storeTheme(theme) {
 }
 
 export function initThemeToggle() {
+  // O tema já foi aplicado pelo script inline no <head> — aqui só
+  // sincronizamos o ícone do botão com o estado atual.
   syncButton(root.getAttribute('data-theme') === 'dark');
 
   toggleButton.addEventListener('click', () => {

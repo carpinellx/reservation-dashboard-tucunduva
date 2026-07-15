@@ -1,8 +1,5 @@
-// Service Worker — Fazenda Tucunduva
-//
-// Estratégia: network-first para tudo.
-// Sempre busca do servidor quando há conexão — garante arquivos frescos.
-// Cai para cache apenas se estiver offline.
+// Estratégia network-first: busca do servidor quando há conexão,
+// cai para cache apenas offline.
 
 const CACHE_NAME = 'garcom-v9';
 
@@ -26,7 +23,6 @@ const STATIC_ASSETS = [
   './assets/icons/icon-apple.png',
 ];
 
-// Instalação: pré-carrega os arquivos no cache para uso offline.
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS)),
@@ -34,7 +30,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Ativação: remove caches de versões anteriores.
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -48,9 +43,6 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: network-first para tudo.
-// Online  → servidor (sempre atualizado) + atualiza cache em background.
-// Offline → cache (última versão conhecida).
 self.addEventListener('fetch', (event) => {
   event.respondWith(networkFirst(event.request));
 });

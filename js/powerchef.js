@@ -1,5 +1,3 @@
-// Integração com a API do PowerChef.
-
 import { POWERCHEF_API_URL } from './config.js';
 
 // Lista fixa de mesas do salão (sem 13 e 14)
@@ -32,10 +30,6 @@ export async function fetchMesasOcupadas() {
   }
 }
 
-/**
- * Calcula o status de uma reserva cruzando com as mesas abertas no PowerChef.
- * Usado na visão padrão (só reservas).
- */
 export function calcularStatusMesa(numMesa, mesasOcupadas) {
   if (!mesasOcupadas || mesasOcupadas.length === 0) return null;
 

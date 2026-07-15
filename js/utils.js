@@ -1,5 +1,3 @@
-// Funções utilitárias puras, sem efeitos colaterais no DOM.
-
 const WEEKDAY_NAMES = [
   'Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira',
   'Quinta-feira', 'Sexta-feira', 'Sábado',
@@ -10,15 +8,7 @@ const MONTH_NAMES = [
   'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro',
 ];
 
-/**
- * Retorna a área física de uma mesa com base no número.
- * Mesas 1–12  → 'externa'
- * Mesas 15–30 → 'interna'
- * Qualquer outro número → '' (desconhecida)
- *
- * @param {number|string} mesa
- * @returns {'externa' | 'interna' | ''}
- */
+// Mesas 1–12 → 'externa' | 15–30 → 'interna'
 export function getAreaByMesa(mesa) {
   const num = Number(mesa);
   if (num >= 1  && num <= 12) return 'externa';

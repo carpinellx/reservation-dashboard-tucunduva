@@ -1,6 +1,3 @@
-// Transforma o texto CSV exportado pelo Google Sheets em uma lista de
-// objetos de reserva. Suporta dois layouts de colunas:
-//
 // Almoço:  empty | MESA | NOME | ADULTO | CRIANÇA | HORÁRIO | ÁREA | OBS
 // Café:    empty | MESA | NOME | ADULTO | CRIANÇA 6-10 | CRIANÇA -5 | HORÁRIO | OBS
 
@@ -22,8 +19,6 @@ export function parseReservationsCsv(csvText, { isCafe = false } = {}) {
       .map((col) => col.replace(/^"/, '').replace(/"$/, '').trim());
 
     if (cols.length < MIN_COLUMNS) {
-      // Só reporta como problema se há conteúdo além da primeira coluna
-      // (pode ser linha de título com poucas colunas — descarte esperado).
       if (cols.some((c, i) => i > 0 && c)) {
         skipped.push({ line, reason: `menos de ${MIN_COLUMNS} colunas` });
       }
@@ -33,7 +28,6 @@ export function parseReservationsCsv(csvText, { isCafe = false } = {}) {
     const mesa = cols[1];
     const nome = cols[2];
 
-    // Linha de totais/agregação: mesa e nome vazios — descarte esperado.
     if (!mesa && !nome) continue;
 
     if (!mesa || !nome) {
@@ -42,7 +36,6 @@ export function parseReservationsCsv(csvText, { isCafe = false } = {}) {
     }
 
     if (Number.isNaN(Number(mesa))) {
-      // Linha 0 é sempre o cabeçalho (ex: "Mesa", "Nome") — descarte esperado.
       if (index === 0) continue;
       skipped.push({ line, reason: `mesa "${mesa}" não é um número` });
       continue;

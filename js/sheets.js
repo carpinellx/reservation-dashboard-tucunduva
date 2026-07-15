@@ -1,10 +1,3 @@
-// Camada de acesso ao Google Sheets: busca a lista de eventos (_index)
-// e os dados de reservas de cada aba individualmente.
-//
-// O acesso é feito via proxy (Google Apps Script Web App) em vez de
-// consumir o endpoint gviz/tq diretamente. Isso mantém o SPREADSHEET_ID
-// e o token fora do código público, e permite que a planilha fique privada.
-
 import { PROXY_URL, PROXY_TOKEN } from './config.js';
 import { parseReservationsCsv } from './csvParser.js';
 import { resolveReservationDate } from './events.js';
@@ -46,11 +39,6 @@ async function fetchSheet(sheetName, bypassCache = false) {
   return text;
 }
 
-/**
- * Lê a aba _index e devolve a lista de eventos.
- *
- * @returns {Array<{ tabName: string, customHours: string }>}
- */
 export async function fetchEventNames() {
   const csvText = await fetchSheet('_index');
 
@@ -74,19 +62,8 @@ export async function fetchEventNames() {
     .filter(Boolean);
 }
 
-/**
- * Busca as reservas de uma aba de evento específica.
- *
- * Recebe o objeto `event` completo (em vez de só `tabName`) para:
- * 1. Usar `event.serviceKey` como única fonte de verdade sobre o tipo do
- *    evento — evita re-derivar "é café?" com outra checagem de substring.
- * 2. Usar `event.date` via `resolveReservationDate` para calcular a data
- *    real de cada reserva, considerando eventos que atravessam a meia-noite.
- *
- * @param {{ tabName: string, serviceKey: string, date: Date }} event
- * @param {{ bypassCache?: boolean }} options
- * @returns {{ reservations: Array, skipped: Array }}
- */
+// Recebe o evento completo (não só tabName) para usar serviceKey como
+// fonte de verdade do tipo e calcular eventDate via resolveReservationDate.
 export async function fetchEventReservations(event, { bypassCache = false } = {}) {
   const csvText = await fetchSheet(event.tabName, bypassCache);
 

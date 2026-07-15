@@ -18,6 +18,5 @@ node_modules/
 # Pasta gerada pelo Vite no build — não precisa versionar
 dist/
 
-# Script do proxy — roda dentro da conta Google (script.google.com),
-# não pertence ao repositório. Mantido localmente só como referência.
+# Roda no script.google.com — mantido localmente só como referência.
 proxy/

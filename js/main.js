@@ -13,11 +13,8 @@ import {
   adaptTableToEvent,
   setStatus,
 } from './render.js';
-import { formatDate } from './utils.js';
-import { getAreaByMesa } from './utils.js';
+import { formatDate, getAreaByMesa } from './utils.js';
 import { initThemeToggle } from './theme.js';
-
-// ─── Estado ───────────────────────────────────────────────────────────────
 
 const state = {
   events:            [],
@@ -29,8 +26,6 @@ const state = {
   mesasOcupadas:     [],
   mostrarTodasMesas: false,  // false = tabela de reservas | true = visão do salão
 };
-
-// ─── DOM ──────────────────────────────────────────────────────────────────
 
 const elements = {
   headerDate:    document.getElementById('header-date'),
@@ -46,8 +41,6 @@ const elements = {
   },
 };
 
-// ─── Renderização ─────────────────────────────────────────────────────────
-
 function isCafeEvent() {
   return state.selectedEvent?.serviceKey === 'cafe';
 }
@@ -55,11 +48,9 @@ function isCafeEvent() {
 function updateView(newKeys = new Set()) {
   const isCafe = isCafeEvent();
 
-  // Stats sempre mostram o total do evento, independente da view ativa.
   renderStats(state.reservations);
 
   if (state.mostrarTodasMesas) {
-    // VIEW SALÃO: mesas do salão com status PowerChef.
     // Aplica o filtro de área (Externa/Interna) igual à view de reservas.
     let visaoSalao = montarVisaoSalao(state.mesasOcupadas, state.reservations);
 
@@ -70,7 +61,6 @@ function updateView(newKeys = new Set()) {
     renderTabelaSalao(visaoSalao);
     renderCounter(0, 0);
   } else {
-    // VIEW RESERVAS: tabela filtrada/ordenada das reservas do evento.
 const reservasVisiveis = selectVisibleReservations(state.reservations, {
   area: isCafe ? 'all' : state.filter,
   search: elements.searchInput.value,
@@ -95,14 +85,11 @@ function setFilter(filter) {
 function toggleTodasMesas() {
   state.mostrarTodasMesas = !state.mostrarTodasMesas;
 
-  // Atualiza o visual do botão toggle
   elements.btnTodasMesas?.classList.toggle('active', state.mostrarTodasMesas);
   elements.btnTodasMesas?.setAttribute('aria-pressed', String(state.mostrarTodasMesas));
 
   updateView();
 }
-
-// ─── Carregamento de dados ────────────────────────────────────────────────
 
 async function loadEvents() {
   setStatus(null, 'Carregando eventos...');
@@ -206,8 +193,6 @@ async function refreshCurrentEvent() {
   }
 }
 
-// ─── Eventos da UI ────────────────────────────────────────────────────────
-
 function registerEventListeners() {
   elements.eventList.addEventListener('click', (e) => {
     const card = e.target.closest('[data-tab]');
@@ -224,17 +209,13 @@ function registerEventListeners() {
   });
 
   elements.refreshButton.addEventListener('click', refreshCurrentEvent);
-
-  // Botão toggle: alterna entre visão de reservas e visão do salão.
-  // O ?. (optional chaining) evita erro caso o botão não exista no HTML.
+  
   elements.btnTodasMesas?.addEventListener('click', toggleTodasMesas);
 
   elements.filterButtons.all.addEventListener('click',     () => setFilter('all'));
   elements.filterButtons.externa.addEventListener('click', () => setFilter('externa'));
   elements.filterButtons.interna.addEventListener('click', () => setFilter('interna'));
 }
-
-// ─── Init ─────────────────────────────────────────────────────────────────
 
 function init() {
   elements.headerDate.textContent = formatDate();

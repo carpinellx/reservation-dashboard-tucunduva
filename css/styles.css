@@ -1,5 +1,4 @@
 :root {
-  /* Paleta principal — tons de azul (nomes corrigidos: antes chamados de "verde") */
   --azul-escuro: #36537D;
   --azul-medio: #47648F;
   --azul-claro: #6E86A9;
@@ -215,29 +214,6 @@ header {
   border-color: var(--azul-medio);
 }
 
-.btn-refresh {
-  padding: 8px 16px;
-  font-size: 13px;
-  font-family: 'DM Sans', sans-serif;
-  border: 1px solid var(--borda);
-  border-radius: 20px;
-  background: transparent;
-  color: var(--texto-suave);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.15s;
-}
-
-.btn-refresh:hover { background: var(--azul-palido); }
-.btn-refresh svg { transition: transform 0.4s; }
-.btn-refresh.spinning svg { transform: rotate(360deg); }
-
-/* ==========================================================
-   BOTÃO FLUTUANTE DE ATUALIZAÇÃO
-   ========================================================== */
-
 .fab-refresh {
   position: fixed;
   right: 22px;
@@ -290,8 +266,6 @@ header {
   stroke: currentColor;
 }
 
-/* animação ao atualizar */
-
 .fab-refresh.spinning svg{
     animation: girarRefresh .7s linear infinite;
 }
@@ -306,8 +280,6 @@ header {
   }
 }
 
-/* modo escuro */
-
 [data-theme="dark"] .fab-refresh {
   background: var(--azul-medio);
   box-shadow:
@@ -318,8 +290,6 @@ header {
 [data-theme="dark"] .fab-refresh:hover {
   background: var(--azul-escuro);
 }
-
-/* celular */
 
 @media (max-width: 600px) {
 
@@ -437,8 +407,6 @@ td { padding: 13px 14px; vertical-align: middle; }
   font-weight: 500;
 }
 
-/* ─── Status PowerChef ────────────────────────────────────────────────────── */
-
 .mesa-status {
   display: inline-block;
   padding: 4px 10px;
@@ -532,8 +500,8 @@ footer {
     font-style: italic;
   }
 
-  th:nth-child(6),
-  td:nth-child(6) { display: none; }
+  th:nth-child(5),
+  td:nth-child(5) { display: none; }
 }
 
 /* ===== Seletor de eventos ===== */
