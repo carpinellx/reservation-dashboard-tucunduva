@@ -500,8 +500,8 @@ footer {
     font-style: italic;
   }
 
-  th:nth-child(5),
-  td:nth-child(5) { display: none; }
+  th:nth-child(6),
+  td:nth-child(6) { display: none; }
 }
 
 /* ===== Seletor de eventos ===== */
